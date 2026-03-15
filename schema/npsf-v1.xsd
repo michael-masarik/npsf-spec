@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="https://michaelmasarik/npsf/v1"
+    xmlns="https://example.org/npsf/v1"
+    elementFormDefault="qualified"> <!--TODO: url-->
+
+</xs:schema>
+<!--
+NPSF — Notion Publishing Site Format
+
+Specification:
+https://github.com/michael-masarik/npsf-spec
+
+Licensed under CC BY 4.0
+-->
+<xs:element name='database'>
+    <xs:complexType>
+        <xs:element name='databasetype'>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value='table' />
+                    <!--TODO: add other types-->
+                <xs:restriction/>
+            <xs:simpleType/>
+        <xs:element/>
+        <xs:element name="databaseschema">
+        <!--TODO: Add property types -->
+        </xs:element>
+    <xs:complexType/>
+<xs:element/>
