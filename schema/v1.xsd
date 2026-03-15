@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="https://masariktools.com/npsf/v1"
+    xmlns="https://npsf.masariktools.com/schema/v1.xsd"
+    elementFormDefault="qualified"> <!--TODO: url-->
+    
+    <!-- Move all elements inside the schema -->
+    <xs:element name="page">
+        <xs:complexType>
+            <!--TODO-->
+            <xs:attribute name="pageid" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name='database'>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name='databasetype'>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value='table' />
+                            <!--TODO: add other types-->
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="databaseschema">
+                    <!--TODO: Add property types -->
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+</xs:schema>
+
+<!--
+NPSF — Notion Publishing Site Format
+
+Specification:
+https://github.com/michael-masarik/npsf-spec
+
+Licensed under CC BY 4.0
+-->
