@@ -2,43 +2,139 @@
 
 <xs:schema
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    targetNamespace="https://masariktools.com/npsf/v1"
+    targetNamespace="https://npsf.masariktools.com/schema/v1.xsd"
     xmlns="https://npsf.masariktools.com/schema/v1.xsd"
-    elementFormDefault="qualified"> <!--TODO: url-->
-    
-    <!-- Move all elements inside the schema -->
-    <xs:element name="page">
-        <xs:complexType>
-            <!--TODO-->
-            <xs:attribute name="pageid" type="xs:string" use="required" />
-        </xs:complexType>
+    elementFormDefault="qualified"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+    <xs:element name="em" type="xs:string" />
+    <xs:element name="strong" type="xs:string" />
+    <xs:element name="underline" type="xs:string" />
+    <xs:element name="strikethrough" type="xs:string" />
+    <xs:element name="a" type="xs:string" />
+    <xs:element name="span" type="xs:string" />
+    <xs:element name="pre" type="xs:string" />
+    <xs:annotation>
+        <xs:documentation> NPSF — Notion Publishing Site Format Specification:
+            https://github.com/michael-masarik/npsf-spec Licensed under CC BY 4.0 </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="databaseschema">
+        <!--TODO:
+        Add property types -->
     </xs:element>
-    
-    <xs:element name='database'>
+
+    <xs:complexType name="inlineType" mixed="true">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element ref="em" />
+            <xs:element ref="strong" />
+            <xs:element ref="underline" />
+            <xs:element ref="strikethrough" />
+            <xs:element ref="a" />
+            <xs:element ref="span" />
+            <xs:element ref="pre" />
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:element name="p" type="inlineType" />
+
+
+    <xs:element name="summary">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name='databasetype'>
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:enumeration value='table' />
-                            <!--TODO: add other types-->
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="databaseschema">
-                    <!--TODO: Add property types -->
+                <xs:element ref="p" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="details">
+        <xs:complexType>
+            <xs:sequence>
+                <!-- summary must come first -->
+                <xs:element ref="summary" />
+                <!-- other children allowed after summary -->
+                <xs:any namespace="http://www.w3.org/1999/xhtml"
+                    processContents="lax"
+                    minOccurs="0"
+                    maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="toggle">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="details" />
+            </xs:sequence>
+            <xs:attribute name="heading" type="xs:nonNegativeInteger" use="optional" />
+            <xs:attribute name="color" type="xs:string" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="properties">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="property" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="type" type="xs:string" use="required" />
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="id" type="xs:string" use="optional"></xs:attribute>
+                    </xs:complexType>
                 </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    
+    <xs:element name="content">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any maxOccurs="unbounded"></xs:any> <!-- TODO: limit this to only valid notion
+                blocks -->
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="subpage">
+        <xs:complexType>
+            <xs:attribute name="title" type="xs:string" use="required" />
+            <xs:attribute name="id" type="xs:string" use="required" />
+            <xs:attribute name="icon" type="xs:anyURI" use="optional" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="pages">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="subpage" maxOccurs="unbounded" minOccurs="0" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name='database'>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="databaseschema" />
+                <xs:element ref="pages" />
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="callout">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="page">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="properties" />
+                <xs:element ref="content" />
+            </xs:sequence>
+            <xs:attribute name="pageid" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+
 </xs:schema>
-
-<!--
-NPSF — Notion Publishing Site Format
-
-Specification:
-https://github.com/michael-masarik/npsf-spec
-
-Licensed under CC BY 4.0
--->
